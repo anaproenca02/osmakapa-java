@@ -1,3 +1,5 @@
+Ana Luiza Proença, Gustavo Gomes e Kaique Lira
+
 # usuario-api-v2
 
 Evolução didática da aplicação Spring Boot, agora preparada para **PostgreSQL + Docker**.
