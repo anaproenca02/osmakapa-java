@@ -190,3 +190,18 @@ Depois, no pgAdmin, cadastre o servidor com:
 - Database: `usuario_db`
 - Username: `postgres`
 - Password: `postgres`
+
+## Projeto academico integrado
+
+Esta versao cobre os requisitos do estudo de caso de POO + Engenharia de Software.
+
+- RF01: cadastro de alunos em `/api/usuarios`
+- RF02: CRUD de cursos em `/api/cursos`
+- RF03, RF06, RF09: matricula normal ou bonus em `/api/matriculas`, com assinatura ativa e creditos
+- RF04, RF05, RF10, RF11: conclusao com nota final em `/api/matriculas/{id}/concluir`, media minima 7, 3 creditos e promocao Premium ao atingir 12 conclusoes
+- RF07, RF08, RF09: forum, comentarios, ranking e curso bonus em `/api/forum`
+- RF12, RF13: projetos reais para alunos Premium em `/api/projetos-reais`, gerando 3 moedas por participacao
+- RF14, RN08, RN10: resgate de cursos e beneficios por moedas em `/api/beneficios`
+- RF15: controle de pagamentos mensais em `/api/pagamentos`
+
+O Swagger em `http://localhost:8080/swagger-ui/index.html` mostra todos os endpoints para demonstracao.

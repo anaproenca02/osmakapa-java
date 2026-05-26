@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>PagamentoRestController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+PagamentoRestController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">controller</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">request</span><span class="s2">.</span><span class="s1">PagamentoRequestDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">response</span><span class="s2">.</span><span class="s1">PagamentoResponseDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">service</span><span class="s2">.</span><span class="s1">PagamentoService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">io</span><span class="s2">.</span><span class="s1">swagger</span><span class="s2">.</span><span class="s1">v3</span><span class="s2">.</span><span class="s1">oas</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">Operation</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">io</span><span class="s2">.</span><span class="s1">swagger</span><span class="s2">.</span><span class="s1">v3</span><span class="s2">.</span><span class="s1">oas</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">tags</span><span class="s2">.</span><span class="s1">Tag</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">jakarta</span><span class="s2">.</span><span class="s1">validation</span><span class="s2">.</span><span class="s1">Valid</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpStatus</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">bind</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s1">@RestController</span>
+<span class="s1">@RequestMapping</span><span class="s2">(</span><span class="s3">&quot;/api/pagamentos&quot;</span><span class="s2">)</span>
+<span class="s1">@Tag</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Pagamentos&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">PagamentoRestController </span><span class="s2">{</span>
+
+    <span class="s0">private final </span><span class="s1">PagamentoService service</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">PagamentoRestController</span><span class="s2">(</span><span class="s1">PagamentoService service</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">service </span><span class="s2">= </span><span class="s1">service</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span>
+    <span class="s1">@ResponseStatus</span><span class="s2">(</span><span class="s1">HttpStatus</span><span class="s2">.</span><span class="s1">CREATED</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Criar pagamento mensal de assinatura&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">PagamentoResponseDTO criar</span><span class="s2">(</span><span class="s1">@Valid @RequestBody PagamentoRequestDTO dto</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">criar</span><span class="s2">(</span><span class="s1">dto</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PutMapping</span><span class="s2">(</span><span class="s3">&quot;/{id}/confirmar&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Confirmar pagamento e ativar assinatura&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">PagamentoResponseDTO confirmar</span><span class="s2">(</span><span class="s1">@PathVariable Long id</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">confirmar</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PutMapping</span><span class="s2">(</span><span class="s3">&quot;/{id}/cancelar&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Cancelar pagamento&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">PagamentoResponseDTO cancelar</span><span class="s2">(</span><span class="s1">@PathVariable Long id</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">cancelar</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/usuario/{usuarioId}&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Listar pagamentos por usuario&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">PagamentoResponseDTO</span><span class="s2">&gt; </span><span class="s1">listarPorUsuario</span><span class="s2">(</span><span class="s1">@PathVariable Long usuarioId</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">listarPorUsuario</span><span class="s2">(</span><span class="s1">usuarioId</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

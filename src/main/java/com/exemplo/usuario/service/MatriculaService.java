@@ -1,11 +1,11 @@
 package com.exemplo.usuario.service;
 
-import com.exemplo.usuario.domain.Assinatura;
-import com.exemplo.usuario.domain.Curso;
-import com.exemplo.usuario.domain.Matricula;
-import com.exemplo.usuario.domain.StatusMatricula;
-import com.exemplo.usuario.domain.Usuario;
-import com.exemplo.usuario.dto.MatriculaResponseDTO;
+import com.exemplo.usuario.domain.assinatura.Assinatura;
+import com.exemplo.usuario.domain.curso.Curso;
+import com.exemplo.usuario.domain.matricula.Matricula;
+import com.exemplo.usuario.domain.matricula.StatusMatricula;
+import com.exemplo.usuario.domain.usuario.Usuario;
+import com.exemplo.usuario.dto.response.MatriculaResponseDTO;
 import com.exemplo.usuario.repository.AssinaturaRepository;
 import com.exemplo.usuario.repository.CursoRepository;
 import com.exemplo.usuario.repository.MatriculaRepository;
@@ -52,6 +52,9 @@ public class MatriculaService {
                 .orElseThrow(() -> new RuntimeException("Assinatura nao encontrada"));
 
         // 2) Aplicar regra de negocio.
+        if (!assinatura.isAtiva()) {
+            throw new RuntimeException("Assinatura inativa. O acesso aos cursos depende de assinatura ativa.");
+        }
         if (bonus) {
             assinatura.consumirCredito();
         }

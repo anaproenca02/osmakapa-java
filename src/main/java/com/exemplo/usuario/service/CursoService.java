@@ -1,8 +1,8 @@
 package com.exemplo.usuario.service;
 
-import com.exemplo.usuario.domain.Curso;
-import com.exemplo.usuario.dto.CursoRequestDTO;
-import com.exemplo.usuario.dto.CursoResponseDTO;
+import com.exemplo.usuario.domain.curso.Curso;
+import com.exemplo.usuario.dto.request.CursoRequestDTO;
+import com.exemplo.usuario.dto.response.CursoResponseDTO;
 import com.exemplo.usuario.repository.CursoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +28,12 @@ public class CursoService {
         return repository.findAll().stream().map(this::toDTO).toList();
     }
 
+    public CursoResponseDTO buscarPorId(Long id) {
+        Curso curso = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Curso nao encontrado"));
+        return toDTO(curso);
+    }
+
     // @Transactional e tipico da camada de servico.
     // Indica que o metodo deve executar dentro de uma transacao.
     @Transactional
@@ -37,6 +43,23 @@ public class CursoService {
 
         // save(...) persiste no banco.
         return toDTO(repository.save(curso));
+    }
+
+    @Transactional
+    public CursoResponseDTO atualizar(Long id, CursoRequestDTO dto) {
+        Curso curso = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Curso nao encontrado"));
+        curso.alterarTitulo(dto.getTitulo());
+        curso.alterarDescricao(dto.getDescricao());
+        return toDTO(repository.save(curso));
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Curso nao encontrado");
+        }
+        repository.deleteById(id);
     }
 
     // Metodo privado de apoio para mapear entidade -> DTO.

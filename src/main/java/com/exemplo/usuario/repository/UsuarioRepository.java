@@ -1,6 +1,6 @@
 package com.exemplo.usuario.repository;
 
-import com.exemplo.usuario.domain.Usuario;
+import com.exemplo.usuario.domain.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 // Repository de Usuario.

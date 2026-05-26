@@ -1,6 +1,6 @@
 package com.exemplo.usuario.repository;
 
-import com.exemplo.usuario.domain.Assinatura;
+import com.exemplo.usuario.domain.assinatura.Assinatura;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

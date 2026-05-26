@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1200" viewBox="0 0 2200 1200">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .bg{fill:#f8fafc}.title{font:700 34px Arial,Helvetica,sans-serif;fill:#111827}.sub{font:18px Arial,Helvetica,sans-serif;fill:#4b5563}
+      .box{fill:#fff;stroke:#334155;stroke-width:2.5;rx:14;ry:14}.decision{fill:#fff;stroke:#334155;stroke-width:2.5}
+      .txt{font:700 22px Arial,Helvetica,sans-serif;fill:#111827;text-anchor:middle;dominant-baseline:middle}.lbl{font:700 18px Arial,Helvetica,sans-serif;fill:#374151;text-anchor:middle}
+      .line{fill:none;stroke:#1f2937;stroke-width:2.7;marker-end:url(#arrow)}.start{fill:#111827;stroke:#111827;stroke-width:2}.endO{fill:#fff;stroke:#111827;stroke-width:3}.endI{fill:#111827}
+      .lane{fill:#eef2f7;stroke:#cbd5e1;stroke-width:1.5}.laneText{font:700 18px Arial,Helvetica,sans-serif;fill:#475569;text-anchor:middle}
+    </style>
+  </defs>
+
+  <rect class="bg" width="2200" height="1200"/>
+  <text class="title" x="1100" y="62" text-anchor="middle">Diagrama de Atividades UML - Conclusao de Curso</text>
+  <text class="sub" x="1100" y="94" text-anchor="middle">Plataforma de cursos online | Caso de uso: Conclusao de Curso</text>
+
+  <rect class="lane" x="70" y="150" width="2060" height="210"/>
+  <text class="laneText" x="1100" y="178">Fluxo principal</text>
+  <rect class="lane" x="70" y="430" width="2060" height="230"/>
+  <text class="laneText" x="1100" y="458">Regra da media final</text>
+  <rect class="lane" x="70" y="730" width="2060" height="300"/>
+  <text class="laneText" x="1100" y="758">Regra de plano Premium</text>
+
+  <circle class="start" cx="120" cy="255" r="19"/>
+
+  <rect class="box" x="185" y="215" width="210" height="80"/>
+  <text class="txt" x="290" y="244">Aluno finaliza</text>
+  <text class="txt" x="290" y="270">curso</text>
+
+  <rect class="box" x="465" y="215" width="230" height="80"/>
+  <text class="txt" x="580" y="244">Registrar</text>
+  <text class="txt" x="580" y="270">conclusao</text>
+
+  <rect class="box" x="765" y="215" width="230" height="80"/>
+  <text class="txt" x="880" y="244">Calcular media</text>
+  <text class="txt" x="880" y="270">final</text>
+
+  <polygon class="decision" points="1150,175 1245,255 1150,335 1055,255"/>
+  <text class="txt" x="1150" y="246">Media</text>
+  <text class="txt" x="1150" y="272">&gt;= 7?</text>
+
+  <rect class="box" x="1070" y="505" width="160" height="80"/>
+  <text class="txt" x="1150" y="533">Exibir</text>
+  <text class="txt" x="1150" y="559">resultado</text>
+
+  <circle class="endO" cx="1150" cy="640" r="24"/>
+  <circle class="endI" cx="1150" cy="640" r="14"/>
+
+  <rect class="box" x="1325" y="215" width="240" height="80"/>
+  <text class="txt" x="1445" y="244">Liberar 3 novos</text>
+  <text class="txt" x="1445" y="270">cursos</text>
+
+  <rect class="box" x="1625" y="215" width="260" height="80"/>
+  <text class="txt" x="1755" y="244">Atualizar cursos</text>
+  <text class="txt" x="1755" y="270">concluidos</text>
+
+  <polygon class="decision" points="1755,780 1865,870 1755,960 1645,870"/>
+  <text class="txt" x="1755" y="848">Cursos</text>
+  <text class="txt" x="1755" y="874">concluidos</text>
+  <text class="txt" x="1755" y="900">&gt;= 12?</text>
+
+  <circle class="endO" cx="2020" cy="870" r="24"/>
+  <circle class="endI" cx="2020" cy="870" r="14"/>
+
+  <rect class="box" x="1370" y="830" width="225" height="80"/>
+  <text class="txt" x="1482.5" y="859">Alterar plano</text>
+  <text class="txt" x="1482.5" y="885">Premium</text>
+
+  <rect class="box" x="1045" y="830" width="245" height="80"/>
+  <text class="txt" x="1167.5" y="859">Liberar projetos</text>
+  <text class="txt" x="1167.5" y="885">reais</text>
+
+  <rect class="box" x="760" y="830" width="205" height="80"/>
+  <text class="txt" x="862.5" y="859">Notificar</text>
+  <text class="txt" x="862.5" y="885">aluno</text>
+
+  <circle class="endO" cx="625" cy="870" r="24"/>
+  <circle class="endI" cx="625" cy="870" r="14"/>
+
+  <path class="line" d="M139 255 H185"/>
+  <path class="line" d="M395 255 H465"/>
+  <path class="line" d="M695 255 H765"/>
+  <path class="line" d="M995 255 H1055"/>
+
+  <path class="line" d="M1150 335 V505"/>
+  <text class="lbl" x="1188" y="425">Nao</text>
+  <path class="line" d="M1150 585 V616"/>
+
+  <path class="line" d="M1245 255 H1325"/>
+  <text class="lbl" x="1285" y="238">Sim</text>
+  <path class="line" d="M1565 255 H1625"/>
+
+  <path class="line" d="M1755 295 V780"/>
+  <path class="line" d="M1865 870 H1996"/>
+  <text class="lbl" x="1930" y="852">Nao</text>
+
+  <path class="line" d="M1645 870 H1595"/>
+  <text class="lbl" x="1620" y="852">Sim</text>
+  <path class="line" d="M1370 870 H1290"/>
+  <path class="line" d="M1045 870 H965"/>
+  <path class="line" d="M760 870 H649"/>
+</svg>

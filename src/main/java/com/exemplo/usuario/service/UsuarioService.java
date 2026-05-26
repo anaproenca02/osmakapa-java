@@ -1,9 +1,9 @@
 package com.exemplo.usuario.service;
 
-import com.exemplo.usuario.domain.Assinatura;
-import com.exemplo.usuario.domain.Usuario;
-import com.exemplo.usuario.dto.UsuarioRequestDTO;
-import com.exemplo.usuario.dto.UsuarioResponseDTO;
+import com.exemplo.usuario.domain.assinatura.Assinatura;
+import com.exemplo.usuario.domain.usuario.Usuario;
+import com.exemplo.usuario.dto.request.UsuarioRequestDTO;
+import com.exemplo.usuario.dto.response.UsuarioResponseDTO;
 import com.exemplo.usuario.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,7 +73,8 @@ public class UsuarioService {
                 assinatura != null ? assinatura.getPlano().name() : null,
                 assinatura != null ? assinatura.getCreditosCursos() : null,
                 assinatura != null ? assinatura.getCursosConcluidosComSucesso() : null,
-                assinatura != null ? assinatura.getMoedas() : null
+                assinatura != null ? assinatura.getMoedas() : null,
+                assinatura != null ? assinatura.isAtiva() : null
         );
     }
 }
