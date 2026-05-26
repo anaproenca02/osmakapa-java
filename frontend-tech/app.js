@@ -1,5 +1,5 @@
 const state = {
-    apiBase: localStorage.getItem("ok_api_base") || "http://localhost:8080",
+    apiBase: localStorage.getItem("ok_api_base") || "",
     authUser: localStorage.getItem("ok_auth_user") || "admin",
     authPass: localStorage.getItem("ok_auth_pass") || "123456",
     usuarios: [],
@@ -11,6 +11,20 @@ const state = {
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
+const studentPhotos = [
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=180&q=80",
+    "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=180&q=80",
+    "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=180&q=80",
+    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=180&q=80",
+    "https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=180&q=80"
+];
+const coursePhotos = [
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
+    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=640&q=80",
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=640&q=80",
+    "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=640&q=80"
+];
 
 function authHeader() {
     return "Basic " + btoa(`${state.authUser}:${state.authPass}`);
@@ -28,7 +42,7 @@ function setConnectionStatus(status, detail) {
     const dot = $("#statusDot");
     dot.className = `status-dot ${status}`;
     $("#connectionLabel").textContent = status === "online" ? "API conectada" : status === "offline" ? "API indisponível" : "Aguardando API";
-    $("#connectionDetail").textContent = detail || state.apiBase;
+    $("#connectionDetail").textContent = detail || state.apiBase || "mesma origem do front";
 }
 
 async function request(path, options = {}) {
@@ -128,36 +142,59 @@ function renderMetrics() {
     $("#metricCursos").textContent = state.cursos.length;
     $("#metricProjetos").textContent = state.projetos.length;
     $("#metricForum").textContent = state.postagens.length;
+    $("#facultyCursos").textContent = state.cursos.length;
+    $("#facultyAlunos").textContent = state.usuarios.length;
+    $("#facultyForum").textContent = state.postagens.length;
+    renderStudentStrip();
 }
 
 function renderUsuarios() {
-    $("#usuariosTable").innerHTML = state.usuarios.map((user) => `
-        <tr>
-            <td>#${user.id}</td>
-            <td>
-                <strong>${escapeHtml(user.nome)}</strong><br>
-                <small>${escapeHtml(user.email)}</small>
-            </td>
-            <td>${escapeHtml(user.plano || "BASICO")}</td>
-            <td>${user.creditosCursos ?? 0}</td>
-            <td>${user.moedas ?? 0}</td>
-            <td><span class="badge ${user.assinaturaAtiva ? "" : "muted"}">${user.assinaturaAtiva ? "Ativa" : "Inativa"}</span></td>
-        </tr>
-    `).join("");
+    $("#usuariosTable").innerHTML = state.usuarios.length ? state.usuarios.map((user, index) => {
+        const progress = Math.min(100, 18 + ((user.cursosConcluidosComSucesso ?? 0) * 18) + ((user.creditosCursos ?? 0) * 6));
+        return `
+            <article class="student-card">
+                <img src="${studentPhotos[index % studentPhotos.length]}" alt="Foto de ${escapeHtml(user.nome)}">
+                <div>
+                    <span class="badge ${user.assinaturaAtiva ? "" : "muted"}">${user.assinaturaAtiva ? "Ativo" : "Bolsa básica"}</span>
+                    <h3>${escapeHtml(user.nome)}</h3>
+                    <small>#${user.id} · ${escapeHtml(user.email)}</small>
+                    <div class="progress-track" aria-label="Progresso acadêmico"><span style="width:${progress}%"></span></div>
+                    <small>${user.creditosCursos ?? 0} créditos · ${user.moedas ?? 0} moedas · ${escapeHtml(user.plano || "BASICO")}</small>
+                </div>
+            </article>
+        `;
+    }).join("") : empty("Nenhum aluno matriculado.");
     renderMetrics();
 }
 
 function renderCursos() {
-    $("#cursosList").innerHTML = state.cursos.length ? state.cursos.map((curso) => `
-        <div class="item">
-            <div class="item-header">
-                <strong>#${curso.id} ${escapeHtml(curso.titulo)}</strong>
-                <span class="badge">Curso</span>
+    $("#cursosList").innerHTML = state.cursos.length ? state.cursos.map((curso, index) => `
+        <article class="course-card">
+            <img src="${coursePhotos[index % coursePhotos.length]}" alt="Imagem do curso ${escapeHtml(curso.titulo)}">
+            <div class="course-card-body">
+                <span class="badge">Trilha</span>
+                <h3>#${curso.id} ${escapeHtml(curso.titulo)}</h3>
+                <p>${escapeHtml(curso.descricao || "Curso preparado para evolução guiada por aulas, prática e projeto final.")}</p>
+                <small>${12 + (index * 3)} aulas · projeto aplicado · certificado</small>
             </div>
-            <p>${escapeHtml(curso.descricao || "Sem descrição cadastrada.")}</p>
-        </div>
+        </article>
     `).join("") : empty("Nenhum curso cadastrado.");
     renderMetrics();
+}
+
+function renderStudentStrip() {
+    const target = $("#studentStrip");
+    if (!target) return;
+    const students = state.usuarios.slice(0, 3);
+    target.innerHTML = students.length ? students.map((user, index) => `
+        <article class="mini-student">
+            <img src="${studentPhotos[index % studentPhotos.length]}" alt="Foto de ${escapeHtml(user.nome)}">
+            <div>
+                <strong>${escapeHtml(user.nome)}</strong>
+                <small>${user.moedas ?? 0} moedas · ${user.creditosCursos ?? 0} créditos</small>
+            </div>
+        </article>
+    `).join("") : empty("Alunos aparecerão aqui quando a API retornar dados.");
 }
 
 function renderProjetos() {
@@ -402,6 +439,14 @@ function setupActions() {
     });
 
     $("#seedDemoBtn").addEventListener("click", seedDemo);
+
+    $$(".role-tab").forEach((button) => {
+        button.addEventListener("click", () => {
+            const role = button.dataset.role;
+            $$(".role-tab").forEach((item) => item.classList.toggle("active", item === button));
+            $$("[data-role-panel]").forEach((panel) => panel.classList.toggle("active", panel.dataset.rolePanel === role));
+        });
+    });
 
     document.addEventListener("click", async (event) => {
         const confirmar = event.target.dataset.confirmarPagamento;

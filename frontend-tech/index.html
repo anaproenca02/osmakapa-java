@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osmakapa Control Hub</title>
+    <title>Osmakapa Academy</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-shell">
         <aside class="sidebar">
             <div class="brand">
-                <span class="brand-mark">OK</span>
+                <span class="brand-mark">OA</span>
                 <div>
-                    <strong>Osmakapa</strong>
-                    <small>Control Hub</small>
+                    <strong>Osmakapa Academy</strong>
+                    <small>Campus digital</small>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=420&q=80" alt="Alunos estudando em grupo">
+                <div>
+                    <strong>Turma Java Pro</strong>
+                    <small>Aprendizagem por trilhas, projetos e comunidade</small>
                 </div>
             </div>
 
             <nav class="nav-stack" aria-label="Navegação principal">
-                <a href="#overview" class="nav-link active">Dashboard</a>
-                <a href="#usuarios" class="nav-link">Usuários</a>
-                <a href="#cursos" class="nav-link">Cursos</a>
-                <a href="#matriculas" class="nav-link">Matrículas</a>
-                <a href="#forum" class="nav-link">Fórum</a>
-                <a href="#projetos" class="nav-link">Projetos</a>
-                <a href="#pagamentos" class="nav-link">Pagamentos</a>
-                <a href="#beneficios" class="nav-link">Benefícios</a>
+                <a href="#inicio" class="nav-link active">Início</a>
+                <a href="#visoes" class="nav-link">Visões</a>
+                <a href="#trilhas" class="nav-link">Trilhas</a>
+                <a href="#alunos" class="nav-link">Alunos</a>
+                <a href="#professor" class="nav-link">Professor</a>
+                <a href="#curadoria" class="nav-link">Curadoria</a>
+                <a href="#comunidade" class="nav-link">Comunidade</a>
+                <a href="#operacao" class="nav-link">Operação</a>
             </nav>
 
             <div class="connection-card">
                 <span class="status-dot" id="statusDot"></span>
                 <div>
                     <strong id="connectionLabel">Aguardando API</strong>
-                    <small id="connectionDetail">http://localhost:8080</small>
+                    <small id="connectionDetail">mesma origem do front</small>
                 </div>
             </div>
         </aside>
@@ -40,73 +48,149 @@
         <main class="workspace">
             <header class="topbar">
                 <div>
-                    <p class="eyebrow">API Java Spring Boot</p>
-                    <h1>Centro de operação acadêmica</h1>
+                    <p class="eyebrow">Plataforma acadêmica</p>
+                    <h1>Aprenda, acompanhe e publique cursos em um campus conectado.</h1>
                 </div>
                 <div class="topbar-actions">
-                    <button class="ghost-button" id="refreshAllBtn">Atualizar tudo</button>
-                    <button class="primary-button" id="seedDemoBtn">Gerar demo</button>
+                    <button class="ghost-button" id="refreshAllBtn">Atualizar</button>
+                    <button class="primary-button" id="seedDemoBtn">Criar turma demo</button>
                 </div>
             </header>
 
             <section class="config-panel">
                 <label>
                     Base da API
-                    <input id="apiBaseInput" value="http://localhost:8080">
+                    <input id="apiBaseInput" placeholder="Mesmo host do front ou http://localhost:8080">
                 </label>
                 <label>
-                    Usuário Basic Auth
+                    Usuário
                     <input id="authUserInput" value="admin">
                 </label>
                 <label>
                     Senha
                     <input id="authPassInput" value="123456" type="password">
                 </label>
-                <button class="dark-button" id="saveConfigBtn">Salvar conexão</button>
+                <button class="dark-button" id="saveConfigBtn">Salvar</button>
             </section>
 
-            <section id="overview" class="hero-grid">
-                <div class="hero-panel">
-                    <div class="hero-copy">
-                        <p class="eyebrow">Operação em tempo real</p>
-                        <h2>Fluxo completo de alunos, cursos, assinaturas e engajamento.</h2>
-                        <p>Indicadores, cadastros, trilhas, projetos reais e engajamento reunidos em uma visão de operação única.</p>
-                    </div>
-                    <div class="radar-visual" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                    </div>
+            <section id="inicio" class="academy-hero">
+                <div class="hero-media">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=82" alt="Alunos em ambiente acadêmico">
                 </div>
-
-                <div class="metric-grid">
-                    <article class="metric-card">
-                        <span>Usuários</span>
-                        <strong id="metricUsuarios">0</strong>
-                        <small>contas cadastradas</small>
-                    </article>
-                    <article class="metric-card">
-                        <span>Cursos</span>
-                        <strong id="metricCursos">0</strong>
-                        <small>trilhas disponíveis</small>
-                    </article>
-                    <article class="metric-card">
-                        <span>Projetos</span>
-                        <strong id="metricProjetos">0</strong>
-                        <small>experiências reais</small>
-                    </article>
-                    <article class="metric-card">
-                        <span>Postagens</span>
-                        <strong id="metricForum">0</strong>
-                        <small>interações no fórum</small>
-                    </article>
+                <div class="hero-content">
+                    <p class="eyebrow">Osmakapa Learning Experience</p>
+                    <h2>Um app de cursos para alunos, professores e curadores.</h2>
+                    <p>Trilhas, matrículas, projetos reais, fórum, progresso acadêmico e benefícios por engajamento em uma experiência única.</p>
+                    <div class="hero-actions">
+                        <a href="#visoes" class="primary-link">Entrar no campus</a>
+                        <a href="#trilhas" class="ghost-link">Ver trilhas</a>
+                    </div>
                 </div>
             </section>
 
-            <section class="content-grid">
-                <article id="usuarios" class="module-card wide">
+            <section class="metric-grid">
+                <article class="metric-card">
+                    <span>Alunos</span>
+                    <strong id="metricUsuarios">0</strong>
+                    <small>perfis acadêmicos</small>
+                </article>
+                <article class="metric-card">
+                    <span>Cursos</span>
+                    <strong id="metricCursos">0</strong>
+                    <small>trilhas publicadas</small>
+                </article>
+                <article class="metric-card">
+                    <span>Projetos</span>
+                    <strong id="metricProjetos">0</strong>
+                    <small>desafios reais</small>
+                </article>
+                <article class="metric-card">
+                    <span>Comunidade</span>
+                    <strong id="metricForum">0</strong>
+                    <small>postagens ativas</small>
+                </article>
+            </section>
+
+            <section id="visoes" class="role-section">
+                <div class="section-heading">
+                    <p class="eyebrow">Perfis da plataforma</p>
+                    <h2>Três experiências acadêmicas</h2>
+                </div>
+                <div class="role-tabs" aria-label="Selecionar visão">
+                    <button class="role-tab active" data-role="aluno">Aluno</button>
+                    <button class="role-tab" data-role="professor">Professor</button>
+                    <button class="role-tab" data-role="curador">Curador</button>
+                </div>
+
+                <div class="role-panel active" data-role-panel="aluno">
+                    <div class="role-copy">
+                        <p class="eyebrow">Visão do aluno</p>
+                        <h3>Minha jornada de aprendizagem</h3>
+                        <p>Cursos em andamento, conquistas, moedas, fórum e projetos para construir portfólio.</p>
+                        <div class="student-strip" id="studentStrip"></div>
+                    </div>
+                    <div class="role-photo">
+                        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=900&q=82" alt="Aluno estudando no campus">
+                    </div>
+                </div>
+
+                <div class="role-panel" data-role-panel="professor">
+                    <div class="role-copy">
+                        <p class="eyebrow">Visão do professor</p>
+                        <h3>Acompanhamento da turma</h3>
+                        <p>Publicação de cursos, conclusão de matrículas, participação no fórum e leitura do desempenho da turma.</p>
+                        <div class="faculty-grid">
+                            <article><strong id="facultyCursos">0</strong><span>cursos para orientar</span></article>
+                            <article><strong id="facultyAlunos">0</strong><span>alunos ativos</span></article>
+                            <article><strong id="facultyForum">0</strong><span>debates acadêmicos</span></article>
+                        </div>
+                    </div>
+                    <div class="role-photo">
+                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=82" alt="Professor em sala de aula">
+                    </div>
+                </div>
+
+                <div class="role-panel" data-role-panel="curador">
+                    <div class="role-copy">
+                        <p class="eyebrow">Visão do curador</p>
+                        <h3>Qualidade e catálogo</h3>
+                        <p>Organização de trilhas, projetos reais, benefícios, ranking mensal e evolução do ecossistema acadêmico.</p>
+                        <div class="curator-board">
+                            <span>Catálogo revisado</span>
+                            <span>Projetos conectados</span>
+                            <span>Comunidade em análise</span>
+                        </div>
+                    </div>
+                    <div class="role-photo">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=82" alt="Curadora analisando dados acadêmicos">
+                    </div>
+                </div>
+            </section>
+
+            <section id="trilhas" class="content-grid">
+                <article class="module-card wide">
                     <div class="module-header">
                         <div>
-                            <p class="eyebrow">Cadastro</p>
-                            <h2>Usuários</h2>
+                            <p class="eyebrow">Catálogo acadêmico</p>
+                            <h2>Trilhas em destaque</h2>
+                        </div>
+                        <button class="ghost-button" data-refresh="cursos">Recarregar</button>
+                    </div>
+                    <form id="cursoForm" class="form-grid">
+                        <input name="titulo" placeholder="Título do curso" required>
+                        <input name="descricao" placeholder="Descrição da trilha">
+                        <button class="primary-button" type="submit">Publicar curso</button>
+                    </form>
+                    <div id="cursosList" class="course-grid"></div>
+                </article>
+            </section>
+
+            <section id="alunos" class="content-grid">
+                <article class="module-card wide">
+                    <div class="module-header">
+                        <div>
+                            <p class="eyebrow">Vida acadêmica</p>
+                            <h2>Alunos e progresso</h2>
                         </div>
                         <button class="ghost-button" data-refresh="usuarios">Recarregar</button>
                     </div>
@@ -114,96 +198,65 @@
                         <input name="nome" placeholder="Nome completo" required>
                         <input name="email" placeholder="email@dominio.com" type="email" required>
                         <input name="senha" placeholder="Senha inicial" type="password" required>
-                        <button class="primary-button" type="submit">Criar usuário</button>
+                        <button class="primary-button" type="submit">Matricular aluno</button>
                     </form>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr><th>ID</th><th>Nome</th><th>Plano</th><th>Créditos</th><th>Moedas</th><th>Assinatura</th></tr>
-                            </thead>
-                            <tbody id="usuariosTable"></tbody>
-                        </table>
-                    </div>
+                    <div id="usuariosTable" class="student-grid"></div>
                 </article>
+            </section>
 
-                <article id="cursos" class="module-card">
+            <section id="professor" class="content-grid">
+                <article class="module-card">
                     <div class="module-header">
                         <div>
-                            <p class="eyebrow">Catálogo</p>
-                            <h2>Cursos</h2>
-                        </div>
-                        <button class="ghost-button" data-refresh="cursos">Recarregar</button>
-                    </div>
-                    <form id="cursoForm" class="stack-form">
-                        <input name="titulo" placeholder="Título do curso" required>
-                        <textarea name="descricao" placeholder="Descrição detalhada da trilha"></textarea>
-                        <button class="primary-button" type="submit">Publicar curso</button>
-                    </form>
-                    <div id="cursosList" class="item-list"></div>
-                </article>
-
-                <article id="matriculas" class="module-card">
-                    <div class="module-header">
-                        <div>
-                            <p class="eyebrow">Jornada</p>
+                            <p class="eyebrow">Gestão de turma</p>
                             <h2>Matrículas</h2>
                         </div>
                     </div>
                     <form id="matriculaForm" class="form-grid compact">
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
                         <input name="cursoId" placeholder="ID curso" type="number" required>
-                        <label class="check-line"><input name="bonus" type="checkbox"> Bônus</label>
+                        <label class="check-line"><input name="bonus" type="checkbox"> Bolsa bônus</label>
                         <button class="primary-button" type="submit">Matricular</button>
                     </form>
                     <form id="concluirForm" class="form-grid compact">
                         <input name="matriculaId" placeholder="ID matrícula" type="number" required>
                         <input name="notaFinal" placeholder="Nota final" type="number" min="0" max="10" step="0.1" required>
-                        <button class="dark-button" type="submit">Concluir</button>
+                        <button class="dark-button" type="submit">Lançar nota</button>
                     </form>
                     <div class="lookup-row">
-                        <input id="matriculasUsuarioId" placeholder="Buscar por usuário ID" type="number">
+                        <input id="matriculasUsuarioId" placeholder="Consultar aluno por ID" type="number">
                         <button class="ghost-button" id="buscarMatriculasBtn">Buscar</button>
                     </div>
                     <div id="matriculasList" class="item-list"></div>
                 </article>
 
-                <article id="forum" class="module-card wide">
+                <article class="module-card">
                     <div class="module-header">
                         <div>
-                            <p class="eyebrow">Comunidade</p>
-                            <h2>Fórum e ranking</h2>
-                        </div>
-                        <button class="ghost-button" data-refresh="forum">Recarregar</button>
-                    </div>
-                    <form id="postagemForm" class="form-grid">
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
-                        <input name="titulo" placeholder="Título da postagem" required>
-                        <input name="conteudo" placeholder="Conteúdo" required>
-                        <button class="primary-button" type="submit">Postar</button>
-                    </form>
-                    <form id="comentarioForm" class="form-grid compact">
-                        <input name="postagemId" placeholder="ID postagem" type="number" required>
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
-                        <input name="conteudo" placeholder="Comentário" required>
-                        <button class="dark-button" type="submit">Comentar</button>
-                    </form>
-                    <div class="split-panel">
-                        <div>
-                            <h3>Postagens recentes</h3>
-                            <div id="postagensList" class="item-list"></div>
-                        </div>
-                        <div>
-                            <h3>Ranking mensal</h3>
-                            <div id="rankingList" class="ranking-list"></div>
+                            <p class="eyebrow">Financeiro acadêmico</p>
+                            <h2>Assinaturas</h2>
                         </div>
                     </div>
+                    <form id="pagamentoForm" class="form-grid compact">
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
+                        <input name="valor" placeholder="Valor" type="number" min="0.01" step="0.01" required>
+                        <input name="mesReferencia" type="date" required>
+                        <button class="primary-button" type="submit">Criar cobrança</button>
+                    </form>
+                    <div class="lookup-row">
+                        <input id="pagamentosUsuarioId" placeholder="Consultar aluno por ID" type="number">
+                        <button class="ghost-button" id="buscarPagamentosBtn">Buscar</button>
+                    </div>
+                    <div id="pagamentosList" class="item-list"></div>
                 </article>
+            </section>
 
-                <article id="projetos" class="module-card">
+            <section id="curadoria" class="content-grid">
+                <article class="module-card">
                     <div class="module-header">
                         <div>
-                            <p class="eyebrow">Portfólio</p>
-                            <h2>Projetos reais</h2>
+                            <p class="eyebrow">Projetos reais</p>
+                            <h2>Laboratório de portfólio</h2>
                         </div>
                         <button class="ghost-button" data-refresh="projetos">Recarregar</button>
                     </div>
@@ -214,54 +267,76 @@
                     </form>
                     <form id="participacaoForm" class="form-grid compact">
                         <input name="projetoId" placeholder="ID projeto" type="number" required>
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
                         <button class="dark-button" type="submit">Registrar participação</button>
                     </form>
                     <div id="projetosList" class="item-list"></div>
                 </article>
 
-                <article id="pagamentos" class="module-card">
+                <article class="module-card">
                     <div class="module-header">
                         <div>
-                            <p class="eyebrow">Financeiro</p>
-                            <h2>Pagamentos</h2>
-                        </div>
-                    </div>
-                    <form id="pagamentoForm" class="form-grid compact">
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
-                        <input name="valor" placeholder="Valor" type="number" min="0.01" step="0.01" required>
-                        <input name="mesReferencia" type="date" required>
-                        <button class="primary-button" type="submit">Criar cobrança</button>
-                    </form>
-                    <div class="lookup-row">
-                        <input id="pagamentosUsuarioId" placeholder="Buscar por usuário ID" type="number">
-                        <button class="ghost-button" id="buscarPagamentosBtn">Buscar</button>
-                    </div>
-                    <div id="pagamentosList" class="item-list"></div>
-                </article>
-
-                <article id="beneficios" class="module-card wide">
-                    <div class="module-header">
-                        <div>
-                            <p class="eyebrow">Gamificação</p>
-                            <h2>Benefícios e moedas</h2>
+                            <p class="eyebrow">Benefícios</p>
+                            <h2>Moedas e recompensas</h2>
                         </div>
                     </div>
                     <form id="beneficioForm" class="form-grid compact">
-                        <input name="usuarioId" placeholder="ID usuário" type="number" required>
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
                         <select name="tipo" required>
                             <option value="CURSO_EXTRA">Curso extra</option>
                             <option value="MENTORIA">Mentoria</option>
                             <option value="CERTIFICADO">Certificado</option>
                         </select>
-                        <button class="primary-button" type="submit">Resgatar benefício</button>
+                        <button class="primary-button" type="submit">Resgatar</button>
                     </form>
                     <div class="lookup-row">
-                        <input id="beneficiosUsuarioId" placeholder="Buscar por usuário ID" type="number">
+                        <input id="beneficiosUsuarioId" placeholder="Consultar aluno por ID" type="number">
                         <button class="ghost-button" id="buscarBeneficiosBtn">Buscar</button>
                     </div>
                     <div id="beneficiosList" class="item-list"></div>
                 </article>
+            </section>
+
+            <section id="comunidade" class="content-grid">
+                <article class="module-card wide">
+                    <div class="module-header">
+                        <div>
+                            <p class="eyebrow">Comunidade acadêmica</p>
+                            <h2>Fórum e ranking</h2>
+                        </div>
+                        <button class="ghost-button" data-refresh="forum">Recarregar</button>
+                    </div>
+                    <form id="postagemForm" class="form-grid">
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
+                        <input name="titulo" placeholder="Título da postagem" required>
+                        <input name="conteudo" placeholder="Conteúdo" required>
+                        <button class="primary-button" type="submit">Publicar</button>
+                    </form>
+                    <form id="comentarioForm" class="form-grid compact">
+                        <input name="postagemId" placeholder="ID postagem" type="number" required>
+                        <input name="usuarioId" placeholder="ID aluno" type="number" required>
+                        <input name="conteudo" placeholder="Comentário" required>
+                        <button class="dark-button" type="submit">Comentar</button>
+                    </form>
+                    <div class="split-panel">
+                        <div>
+                            <h3>Debates recentes</h3>
+                            <div id="postagensList" class="item-list"></div>
+                        </div>
+                        <div>
+                            <h3>Ranking mensal</h3>
+                            <div id="rankingList" class="ranking-list"></div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section id="operacao" class="academy-footer">
+                <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1100&q=82" alt="Estudantes no campus">
+                <div>
+                    <p class="eyebrow">Campus em operação</p>
+                    <h2>Dados do backend Java conectados à experiência acadêmica.</h2>
+                </div>
             </section>
         </main>
     </div>
