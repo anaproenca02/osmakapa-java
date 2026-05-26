@@ -2,95 +2,1387 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Vue - V2</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OsmaKapa · Plataforma de Cursos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 24px; }
-        .box { max-width: 900px; margin: auto; background: white; padding: 24px; border-radius: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        input, textarea, button, select { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:          #020810;
+            --bg-deep:     #010509;
+            --panel:       rgba(6,14,26,.75);
+            --panel-solid: #060e1a;
+            --border:      #0d2a4a;
+            --border-lite: rgba(13,42,74,.5);
+            --cyan:        #00e5ff;
+            --cyan-dim:    #007a8c;
+            --cyan-ultra:  #00fbff;
+            --green:       #00ff9d;
+            --green-dim:   #00b36e;
+            --orange:      #ff6b35;
+            --purple:      #a855f7;
+            --pink:        #f472b6;
+            --text:        #c8dce8;
+            --text-dim:    #4a6a80;
+            --text-bright: #e8f4ff;
+            --glow:        0 0 20px rgba(0,229,255,.5), 0 0 40px rgba(0,229,255,.2);
+            --glow-g:      0 0 20px rgba(0,255,157,.45), 0 0 40px rgba(0,255,157,.15);
+            --glow-o:      0 0 20px rgba(255,107,53,.4);
+            --radius:      6px;
+            --glass:       rgba(0,229,255,.03);
+            --glass-border: rgba(0,229,255,.08);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── Animated Grid Background ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                    linear-gradient(rgba(0,229,255,.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,229,255,.025) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(50px,50px); }
+        }
+
+        /* ── Scanlines ── */
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,.06) 2px,
+                    rgba(0,0,0,.06) 4px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Ambient Orbs ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: orbFloat 15s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0,229,255,.06) 0%, transparent 70%);
+            top: -100px; left: -100px;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0,255,157,.05) 0%, transparent 70%);
+            bottom: -100px; right: -100px;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(168,85,247,.04) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -3s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        /* ══════════════════ HEADER ══════════════════ */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 36px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(2,8,16,.88);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 5px;
+            color: var(--cyan);
+            text-shadow: var(--glow);
+            display: flex; align-items: center; gap: 12px;
+            user-select: none;
+        }
+        .logo span { color: var(--green); }
+        .logo-icon {
+            width: 36px; height: 36px;
+            border: 2px solid var(--cyan);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            box-shadow: var(--glow);
+        }
+        .logo-icon::before {
+            content: '';
+            width: 8px; height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: var(--glow);
+            animation: corePulse 2s ease-in-out infinite;
+        }
+        @keyframes corePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: .7; }
+        }
+
+        .header-right {
+            display: flex; gap: 24px; align-items: center;
+        }
+
+        .status-bar {
+            display: flex; gap: 14px; align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+        .status-indicator {
+            display: flex; align-items: center; gap: 8px;
+            padding: 5px 12px;
+            border: 1px solid rgba(0,255,157,.2);
+            border-radius: 20px;
+            background: rgba(0,255,157,.05);
+        }
+        .status-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+        .clock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--cyan);
+            padding: 5px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: rgba(0,229,255,.03);
+            letter-spacing: 1px;
+        }
+
+        /* ══════════════════ NAV ══════════════════ */
+        nav {
+            position: sticky; top: 61px; z-index: 99;
+            display: flex; gap: 4px;
+            padding: 8px 36px;
+            background: rgba(3,10,18,.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            padding: 12px 22px;
+            cursor: pointer;
+            color: var(--text-dim);
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+            transition: all .25s cubic-bezier(.4,0,.2,1);
+            background: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .tab::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            opacity: 0;
+            transition: opacity .25s;
+            border-radius: var(--radius);
+        }
+        .tab:hover {
+            color: var(--cyan);
+            border-color: var(--border);
+            background: rgba(0,229,255,.04);
+        }
+        .tab.active {
+            color: var(--bg);
+            border-color: transparent;
+            font-weight: 900;
+        }
+        .tab.active::before { opacity: 1; }
+        .tab.active span,
+        .tab span { position: relative; z-index: 1; }
+
+        /* ══════════════════ MAIN ══════════════════ */
+        main {
+            position: relative; z-index: 5;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 36px 60px;
+        }
+
+        .section { display: none; animation: fadeIn .4s cubic-bezier(.4,0,.2,1); }
+        .section.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 5px;
+            color: var(--text-bright);
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px; height: 20px;
+            background: linear-gradient(180deg, var(--cyan), var(--green));
+            box-shadow: var(--glow);
+            display: block;
+            border-radius: 2px;
+        }
+        .section-title .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-left: auto;
+        }
+
+        /* ══════════════════ GRID ══════════════════ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media(max-width:900px){ .grid-3{grid-template-columns:1fr;} }
+        @media(max-width:768px){ .grid-2{grid-template-columns:1fr;} }
+
+        /* ══════════════════ PANEL / GLASS CARD ══════════════════ */
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: border-color .3s, box-shadow .3s;
+        }
+        .panel:hover {
+            border-color: rgba(0,229,255,.15);
+            box-shadow: 0 4px 30px rgba(0,229,255,.05);
+        }
+        .panel::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: .4;
+        }
+        .panel::after {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, rgba(0,229,255,.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            margin-bottom: 22px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .panel-title .dot {
+            width: 5px; height: 5px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--cyan);
+        }
+
+        /* ══════════════════ STATS ══════════════════ */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        @media(max-width:900px){ .stats{grid-template-columns:repeat(2,1fr);} }
+        @media(max-width:500px){ .stats{grid-template-columns:1fr;} }
+
+        .stat-card {
+            background: var(--panel);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform .2s, box-shadow .3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,.3);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+        .stat-card.c1::before { background: linear-gradient(90deg, var(--cyan), transparent); }
+        .stat-card.c2::before { background: linear-gradient(90deg, var(--green), transparent); }
+        .stat-card.c3::before { background: linear-gradient(90deg, var(--orange), transparent); }
+        .stat-card.c4::before { background: linear-gradient(90deg, var(--purple), transparent); }
+
+        .stat-icon {
+            font-size: 22px;
+            margin-bottom: 12px;
+            opacity: .7;
+        }
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text);
+            line-height: 1;
+        }
+        .stat-value.cyan  { color: var(--cyan);   text-shadow: var(--glow); }
+        .stat-value.green { color: var(--green);  text-shadow: var(--glow-g); }
+        .stat-value.orange{ color: var(--orange); text-shadow: var(--glow-o); }
+        .stat-value.purple{ color: var(--purple); }
+
+        .stat-change {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            margin-top: 8px;
+            color: var(--green);
+        }
+
+        /* ══════════════════ FORM ══════════════════ */
+        .field { margin-bottom: 18px; }
+        .field label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .field input, .field textarea, .field select {
+            width: 100%;
+            background: rgba(0,229,255,.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            padding: 12px 16px;
+            outline: none;
+            transition: border-color .25s, box-shadow .25s, background .25s;
+        }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0,229,255,.1), 0 0 20px rgba(0,229,255,.08);
+            background: rgba(0,229,255,.05);
+        }
+        .field input::placeholder, .field textarea::placeholder {
+            color: var(--text-dim);
+            opacity: .6;
+        }
+        .field select option { background: var(--bg); }
+        .field textarea { resize: vertical; min-height: 80px; }
+
+        /* ══════════════════ BUTTONS ══════════════════ */
+        .btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            padding: 13px 28px;
+            border: 1px solid var(--cyan);
+            background: transparent;
+            color: var(--cyan);
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all .25s cubic-bezier(.4,0,.2,1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--cyan), rgba(0,229,255,.5));
+            opacity: 0;
+            transition: opacity .25s;
+        }
+        .btn:hover {
+            box-shadow: var(--glow);
+            transform: translateY(-1px);
+        }
+        .btn:hover::before { opacity: .12; }
+        .btn:active { transform: translateY(0); }
+        .btn:active::before { opacity: .2; }
+        .btn > * { position: relative; z-index: 1; }
+
+        .btn-green {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .btn-green::before { background: linear-gradient(135deg, var(--green), rgba(0,255,157,.5)); }
+        .btn-green:hover { box-shadow: var(--glow-g); }
+
+        .btn-orange {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+        .btn-orange::before { background: linear-gradient(135deg, var(--orange), rgba(255,107,53,.5)); }
+        .btn-orange:hover { box-shadow: var(--glow-o); }
+
+        .btn-sm {
+            font-size: 9px;
+            padding: 8px 16px;
+            letter-spacing: 1.5px;
+        }
+
+        .btn-solid {
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            border: none;
+            color: var(--bg);
+            font-weight: 900;
+        }
+        .btn-solid:hover {
+            box-shadow: 0 0 25px rgba(0,229,255,.4), 0 0 50px rgba(0,255,157,.2);
+        }
+        .btn-solid::before { display: none; }
+
+        /* ══════════════════ TABLE ══════════════════ */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+        thead tr {
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,229,255,.02);
+        }
+        thead th {
+            text-align: left;
+            padding: 12px 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(13,42,74,.35);
+            transition: background .2s, transform .1s;
+        }
+        tbody tr:hover {
+            background: rgba(0,229,255,.04);
+        }
+        tbody td {
+            padding: 13px 16px;
+            white-space: nowrap;
+        }
+
+        /* ══════════════════ BADGES ══════════════════ */
+        .badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8px;
+            letter-spacing: 1.5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+        .badge-cyan  { border-color: rgba(0,229,255,.3); color: var(--cyan); background: rgba(0,229,255,.08); }
+        .badge-green { border-color: rgba(0,255,157,.3); color: var(--green); background: rgba(0,255,157,.08); }
+        .badge-orange{ border-color: rgba(255,107,53,.3); color: var(--orange); background: rgba(255,107,53,.08); }
+        .badge-purple{ border-color: rgba(168,85,247,.3); color: var(--purple); background: rgba(168,85,247,.08); }
+        .badge-dim   { border-color: var(--border); color: var(--text-dim); background: rgba(74,106,128,.05); }
+
+        /* ══════════════════ ALERT ══════════════════ */
+        .alert {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 14px 18px;
+            border-radius: var(--radius);
+            margin-top: 16px;
+            display: none;
+            animation: alertIn .3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert::before {
+            content: '';
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px;
+        }
+        @keyframes alertIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+        .alert.show { display: block; }
+        .alert-ok  { border: 1px solid rgba(0,255,157,.25); color: var(--green); background: rgba(0,255,157,.05); }
+        .alert-ok::before { background: var(--green); }
+        .alert-err { border: 1px solid rgba(255,107,53,.25); color: var(--orange); background: rgba(255,107,53,.05); }
+        .alert-err::before { background: var(--orange); }
+
+        /* ══════════════════ LOADER ══════════════════ */
+        .loader {
+            display: none;
+            width: 16px; height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--cyan);
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+        }
+        .loader.show { display: inline-block; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        /* ══════════════════ EMPTY ══════════════════ */
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 14px;
+            opacity: .2;
+            display: block;
+        }
+
+        /* ══════════════════ INLINE FORM ══════════════════ */
+        .inline-form { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+        .inline-form .field { margin: 0; flex: 1; min-width: 120px; }
+
+        /* ══════════════════ PROGRESS BAR ══════════════════ */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width .5s cubic-bezier(.4,0,.2,1);
+        }
+        .fill-cyan { background: linear-gradient(90deg, var(--cyan), var(--green)); }
+        .fill-green { background: var(--green); }
+        .fill-orange { background: var(--orange); }
+
+        /* ══════════════════ TOOLTIP ══════════════════ */
+        .tooltip {
+            position: relative;
+        }
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%) scale(.9);
+            background: var(--panel-solid);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all .2s;
+        }
+        .tooltip:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+
+        /* ══════════════════ SCROLLBAR ══════════════════ */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan-dim); }
+
+        /* ══════════════════ MODAL ══════════════════ */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center; justify-content: center;
+            animation: modalIn .3s ease;
+        }
+        .modal-overlay.show { display: flex; }
+        @keyframes modalIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal {
+            background: var(--panel-solid);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            min-width: 400px;
+            max-width: 90vw;
+            position: relative;
+            animation: modalSlide .3s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+        .modal-close {
+            position: absolute; top: 14px; right: 14px;
+            background: none; border: none;
+            color: var(--text-dim);
+            font-size: 18px; cursor: pointer;
+            transition: color .2s;
+        }
+        .modal-close:hover { color: var(--orange); }
+
+        /* ══════════════════ RESPONSIVE ══════════════════ */
+        @media(max-width:600px){
+            header { padding: 14px 18px; }
+            nav { padding: 6px 12px; overflow-x: auto; }
+            main { padding: 20px 16px; }
+            .logo { font-size: 18px; letter-spacing: 3px; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ══════════════════ NOTIFICATION DOT ══════════════════ */
+        .notif-badge {
+            position: absolute; top: -2px; right: -2px;
+            width: 8px; height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--orange);
+        }
+
+        /* ══════════════════ CHART PLACEHOLDER ══════════════════ */
+        .mini-chart {
+            display: flex; align-items: flex-end; gap: 3px;
+            height: 40px; margin-top: 12px;
+        }
+        .mini-chart .bar {
+            flex: 1;
+            border-radius: 2px 2px 0 0;
+            transition: height .5s cubic-bezier(.4,0,.2,1);
+            min-width: 4px;
+        }
     </style>
 </head>
 <body>
-<div id="app" class="box">
-    <h1>Vue.js consumindo a API v2</h1>
-    <div class="grid">
-        <div>
-            <h2>Usuários</h2>
-            <input v-model="usuario.nome" placeholder="Nome">
-            <input v-model="usuario.email" placeholder="E-mail">
-            <input v-model="usuario.senha" type="password" placeholder="Senha">
-            <button @click="criarUsuario">Criar usuário</button>
-            <button @click="listarUsuarios">Atualizar usuários</button>
-            <ul>
-                <li v-for="u in usuarios" :key="u.id">{{ u.id }} - {{ u.nome }} | {{ u.plano }} | créditos {{ u.creditosCursos }}</li>
-            </ul>
+
+<!-- Ambient Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">
+        <div class="logo-icon"></div>
+        OSMA<span>KAPA</span>
+    </div>
+    <div class="header-right">
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span style="color:var(--green); font-family:'JetBrains Mono',monospace; font-size:10px;">SISTEMA ONLINE</span>
         </div>
-        <div>
-            <h2>Cursos</h2>
-            <input v-model="curso.titulo" placeholder="Título">
-            <textarea v-model="curso.descricao" placeholder="Descrição"></textarea>
-            <button @click="criarCurso">Criar curso</button>
-            <button @click="listarCursos">Atualizar cursos</button>
-            <ul>
-                <li v-for="c in cursos" :key="c.id">{{ c.id }} - {{ c.titulo }}</li>
-            </ul>
+        <div class="clock" id="clock">00:00:00</div>
+    </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+    <button class="tab active" onclick="switchTab('dashboard')"><span>◆ DASHBOARD</span></button>
+    <button class="tab" onclick="switchTab('usuarios')"><span>◇ USUÁRIOS</span></button>
+    <button class="tab" onclick="switchTab('cursos')"><span>◇ CURSOS</span></button>
+    <button class="tab" onclick="switchTab('matriculas')"><span>◇ MATRÍCULAS</span></button>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="section active" id="tab-dashboard">
+        <div class="section-title">
+            VISÃO GERAL DO SISTEMA
+            <span class="subtitle">atualizado em tempo real</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card c1">
+                <div class="stat-icon">👤</div>
+                <div class="stat-label">USUÁRIOS CADASTRADOS</div>
+                <div class="stat-value cyan" id="stat-usuarios">—</div>
+                <div class="mini-chart" id="chart-usuarios"></div>
+            </div>
+            <div class="stat-card c2">
+                <div class="stat-icon">📚</div>
+                <div class="stat-label">CURSOS DISPONÍVEIS</div>
+                <div class="stat-value green" id="stat-cursos">—</div>
+                <div class="mini-chart" id="chart-cursos"></div>
+            </div>
+            <div class="stat-card c3">
+                <div class="stat-icon">🎓</div>
+                <div class="stat-label">MATRÍCULAS ATIVAS</div>
+                <div class="stat-value orange" id="stat-matriculas">—</div>
+                <div class="mini-chart" id="chart-matriculas"></div>
+            </div>
+            <div class="stat-card c4">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-label">TAXA DE CONCLUSÃO</div>
+                <div class="stat-value purple" id="stat-taxa">—</div>
+                <div class="progress-bar"><div class="fill fill-cyan" id="progress-taxa" style="width:0%"></div></div>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="grid-2" style="margin-bottom:24px;">
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> AÇÕES RÁPIDAS</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn btn-sm btn-solid" onclick="switchTab('usuarios')">+ NOVO USUÁRIO</button>
+                    <button class="btn btn-sm btn-solid" onclick="switchTab('cursos')">+ NOVO CURSO</button>
+                    <button class="btn btn-sm btn-solid" onclick="switchTab('matriculas')">+ NOVA MATRÍCULA</button>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> STATUS DO SERVIDOR</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); margin-bottom:4px;">API LATENCY</div>
+                        <div style="font-family:'Orbitron',sans-serif; font-size:14px; color:var(--green);" id="api-latency">— ms</div>
+                    </div>
+                    <div>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); margin-bottom:4px;">UPTIME</div>
+                        <div style="font-family:'Orbitron',sans-serif; font-size:14px; color:var(--cyan);">99.9%</div>
+                    </div>
+                    <div>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); margin-bottom:4px;">VERSÃO API</div>
+                        <div style="font-family:'Orbitron',sans-serif; font-size:14px; color:var(--text);">v2.1.0</div>
+                    </div>
+                    <div>
+                        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); margin-bottom:4px;">DATABASE</div>
+                        <div style="font-family:'Orbitron',sans-serif; font-size:14px; color:var(--green);">CONNECTED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Usuários Recentes -->
+        <div class="panel">
+            <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="display:flex;align-items:center;gap:8px;"><div class="dot"></div> ÚLTIMOS USUÁRIOS REGISTRADOS</span>
+                <button class="btn btn-sm" onclick="loadDashboard()">↺ ATUALIZAR</button>
+            </div>
+            <div class="table-wrap">
+                <table id="dash-usuarios-table">
+                    <thead>
+                    <tr>
+                        <th>#ID</th><th>NOME</th><th>EMAIL</th><th>PLANO</th><th>MOEDAS</th><th>CONCLUÍDOS</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dash-usuarios-body">
+                    <tr><td colspan="6"><div class="empty"><span class="empty-icon">◈</span>Carregando dados...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <p>{{ mensagem }}</p>
+
+    <!-- ═══ USUÁRIOS ═══ -->
+    <div class="section" id="tab-usuarios">
+        <div class="section-title">
+            GESTÃO DE USUÁRIOS
+            <span class="subtitle">cadastro e consulta</span>
+        </div>
+
+        <div class="grid-2">
+            <!-- Criar -->
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> NOVO USUÁRIO</div>
+                <div class="field"><label>Nome Completo</label><input id="u-nome" type="text" placeholder="ex: João Silva" /></div>
+                <div class="field"><label>E-mail</label><input id="u-email" type="email" placeholder="usuario@email.com" /></div>
+                <div class="field"><label>Senha</label><input id="u-senha" type="password" placeholder="••••••••" /></div>
+                <button class="btn btn-green" onclick="criarUsuario()">
+                    <span>REGISTRAR</span> <span class="loader" id="loader-u"></span>
+                </button>
+                <div class="alert" id="alert-u"></div>
+            </div>
+
+            <!-- Buscar -->
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> BUSCAR USUÁRIO</div>
+                <div class="field"><label>ID do Usuário</label><input id="u-busca-id" type="number" placeholder="1" /></div>
+                <button class="btn" onclick="buscarUsuario()">
+                    <span>LOCALIZAR</span> <span class="loader" id="loader-ub"></span>
+                </button>
+                <div id="usuario-resultado" style="margin-top:18px;"></div>
+            </div>
+        </div>
+
+        <!-- Listar -->
+        <div class="panel" style="margin-top:24px;">
+            <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="display:flex;align-items:center;gap:8px;"><div class="dot"></div> TODOS OS USUÁRIOS</span>
+                <button class="btn btn-sm" onclick="listarUsuarios()">↺ ATUALIZAR</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr><th>#ID</th><th>NOME</th><th>EMAIL</th><th>PLANO</th><th>CRÉDITOS</th><th>CONCLUÍDOS</th><th>MOEDAS</th><th>AÇÕES</th></tr>
+                    </thead>
+                    <tbody id="usuarios-body">
+                    <tr><td colspan="8"><div class="empty"><span class="empty-icon">◈</span>Clique em Atualizar para carregar</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ CURSOS ═══ -->
+    <div class="section" id="tab-cursos">
+        <div class="section-title">
+            GESTÃO DE CURSOS
+            <span class="subtitle">catálogo de conteúdo</span>
+        </div>
+
+        <div class="grid-2">
+            <!-- Criar -->
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> NOVO CURSO</div>
+                <div class="field"><label>Título do Curso</label><input id="c-titulo" type="text" placeholder="ex: Java Spring Boot" /></div>
+                <div class="field"><label>Descrição</label><textarea id="c-desc" rows="4" placeholder="Descrição detalhada do conteúdo..."></textarea></div>
+                <button class="btn btn-green" onclick="criarCurso()">
+                    <span>CADASTRAR</span> <span class="loader" id="loader-c"></span>
+                </button>
+                <div class="alert" id="alert-c"></div>
+            </div>
+
+            <!-- Catálogo -->
+            <div class="panel">
+                <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="display:flex;align-items:center;gap:8px;"><div class="dot"></div> CATÁLOGO</span>
+                    <button class="btn btn-sm" onclick="listarCursos()">↺ ATUALIZAR</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>#ID</th><th>TÍTULO</th><th>DESCRIÇÃO</th></tr></thead>
+                        <tbody id="cursos-body">
+                        <tr><td colspan="3"><div class="empty"><span class="empty-icon">◈</span>Clique em Atualizar para carregar</div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MATRÍCULAS ═══ -->
+    <div class="section" id="tab-matriculas">
+        <div class="section-title">
+            GESTÃO DE MATRÍCULAS
+            <span class="subtitle">inscrições e conclusões</span>
+        </div>
+
+        <div class="grid-2">
+            <!-- Nova Matrícula -->
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> NOVA MATRÍCULA</div>
+                <div class="field"><label>ID do Usuário</label><input id="m-uid" type="number" placeholder="1" /></div>
+                <div class="field"><label>ID do Curso</label><input id="m-cid" type="number" placeholder="1" /></div>
+                <div class="field">
+                    <label>Tipo de Matrícula</label>
+                    <select id="m-bonus">
+                        <option value="false">PADRÃO</option>
+                        <option value="true">BÔNUS (gratuita)</option>
+                    </select>
+                </div>
+                <button class="btn btn-green" onclick="matricular()">
+                    <span>MATRICULAR</span> <span class="loader" id="loader-m"></span>
+                </button>
+                <div class="alert" id="alert-m"></div>
+            </div>
+
+            <!-- Concluir -->
+            <div class="panel">
+                <div class="panel-title"><div class="dot"></div> CONCLUIR MATRÍCULA</div>
+                <div class="field"><label>ID da Matrícula</label><input id="conc-id" type="number" placeholder="1" /></div>
+                <div class="field"><label>Nota Final (0–10)</label><input id="conc-nota" type="number" step="0.1" min="0" max="10" placeholder="8.5" /></div>
+                <button class="btn btn-orange" onclick="concluirMatricula()">
+                    <span>CONCLUIR</span> <span class="loader" id="loader-conc"></span>
+                </button>
+                <div class="alert" id="alert-conc"></div>
+            </div>
+        </div>
+
+        <!-- Listar por Usuário -->
+        <div class="panel" style="margin-top:24px;">
+            <div class="panel-title"><div class="dot"></div> MATRÍCULAS POR USUÁRIO</div>
+            <div class="inline-form" style="margin-bottom:20px;">
+                <div class="field"><label>ID do Usuário</label><input id="m-list-uid" type="number" placeholder="1" /></div>
+                <button class="btn" onclick="listarMatriculas()" style="margin-bottom:0"><span>BUSCAR</span></button>
+                <span class="loader" id="loader-ml"></span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr><th>#ID</th><th>USUÁRIO</th><th>CURSO</th><th>STATUS</th><th>NOTA</th><th>BÔNUS</th></tr>
+                    </thead>
+                    <tbody id="matriculas-body">
+                    <tr><td colspan="6"><div class="empty"><span class="empty-icon">◈</span>Informe um ID de usuário para buscar</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-content">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modal-body"></div>
+    </div>
 </div>
+
 <script>
-const { createApp } = Vue;
-createApp({
-    data() {
-        return {
-            apiBase: 'http://localhost:8080',
-            auth: 'Basic ' + btoa('admin:123456'),
-            mensagem: '',
-            usuarios: [],
-            cursos: [],
-            usuario: { nome: '', email: '', senha: '' },
-            curso: { titulo: '', descricao: '' }
-        }
-    },
-    methods: {
-        async request(path, options = {}) {
-            const response = await fetch(this.apiBase + path, {
-                ...options,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': this.auth,
-                    ...(options.headers || {})
-                }
-            });
-            const text = await response.text();
-            if (!response.ok) throw new Error(text || 'Erro');
-            return text ? JSON.parse(text) : null;
-        },
-        async listarUsuarios() {
-            this.usuarios = await this.request('/api/usuarios');
-        },
-        async criarUsuario() {
-            await this.request('/api/usuarios', { method: 'POST', body: JSON.stringify(this.usuario) });
-            this.usuario = { nome: '', email: '', senha: '' };
-            this.mensagem = 'Usuário criado';
-            await this.listarUsuarios();
-        },
-        async listarCursos() {
-            this.cursos = await this.request('/api/cursos');
-        },
-        async criarCurso() {
-            await this.request('/api/cursos', { method: 'POST', body: JSON.stringify(this.curso) });
-            this.curso = { titulo: '', descricao: '' };
-            this.mensagem = 'Curso criado';
-            await this.listarCursos();
-        }
-    },
-    mounted() {
-        this.listarUsuarios();
-        this.listarCursos();
+    // ══════════════════ CLOCK ══════════════════
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').textContent =
+            now.toLocaleTimeString('pt-BR', {hour12: false});
     }
-}).mount('#app');
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ══════════════════ TABS ══════════════════
+    function switchTab(name) {
+        const tabs = ['dashboard','usuarios','cursos','matriculas'];
+        document.querySelectorAll('.tab').forEach((t, i) => {
+            t.classList.toggle('active', tabs[i] === name);
+        });
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+
+        if (name === 'dashboard') loadDashboard();
+        if (name === 'usuarios')  listarUsuarios();
+        if (name === 'cursos')    listarCursos();
+    }
+
+    // ══════════════════ API ══════════════════
+    const API = '';
+
+    async function apiFetch(path, method = 'GET', body = null) {
+        const start = performance.now();
+        const opts = {
+            method,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        if (body) opts.body = JSON.stringify(body);
+
+        try {
+            const res = await fetch(API + path, opts);
+            const latency = Math.round(performance.now() - start);
+            updateLatency(latency);
+            const text = await res.text();
+            const json = text ? JSON.parse(text) : {};
+            return { ok: res.ok, status: res.status, data: json };
+        } catch(e) {
+            return { ok: false, status: 0, data: { message: 'Erro de conexão com a API' } };
+        }
+    }
+
+    function updateLatency(ms) {
+        const el = document.getElementById('api-latency');
+        if (el) {
+            el.textContent = ms + ' ms';
+            el.style.color = ms < 100 ? 'var(--green)' : ms < 300 ? 'var(--orange)' : 'var(--orange)';
+        }
+    }
+
+    // ══════════════════ HELPERS ══════════════════
+    function showAlert(id, msg, ok) {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.className = 'alert show ' + (ok ? 'alert-ok' : 'alert-err');
+        setTimeout(() => el.classList.remove('show'), 6000);
+    }
+
+    function loader(id, show) {
+        document.getElementById(id).classList.toggle('show', show);
+    }
+
+    function planoBadge(plano) {
+        if (!plano) return '<span class="badge badge-dim">SEM PLANO</span>';
+        const map = {
+            'premium': 'badge-cyan',
+            'pro': 'badge-purple',
+            'basico': 'badge-dim',
+            'intermediario': 'badge-green'
+        };
+        const key = plano.toLowerCase();
+        const cls = Object.keys(map).find(k => key.includes(k));
+        return `<span class="badge ${cls ? map[cls] : 'badge-green'}">${plano.toUpperCase()}</span>`;
+    }
+
+    function statusBadge(s) {
+        if (!s) return '<span class="badge badge-dim">—</span>';
+        const map = {
+            'CONCLUIDA': 'badge-green',
+            'EM_ANDAMENTO': 'badge-cyan',
+            'CANCELADA': 'badge-orange'
+        };
+        const label = s.replace('_', ' ');
+        return `<span class="badge ${map[s] || 'badge-dim'}">${label}</span>`;
+    }
+
+    function generateMiniChart(containerId, color) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        const bars = 8;
+        for (let i = 0; i < bars; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            const h = 15 + Math.random() * 85;
+            bar.style.height = h + '%';
+            bar.style.background = color;
+            bar.style.opacity = 0.4 + (i / bars) * 0.6;
+            container.appendChild(bar);
+        }
+    }
+
+    // ══════════════════ MODAL ══════════════════
+    function openModal(content) {
+        document.getElementById('modal-body').innerHTML = content;
+        document.getElementById('modal-overlay').classList.add('show');
+    }
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('show');
+    }
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // ══════════════════ DASHBOARD ══════════════════
+    async function loadDashboard() {
+        const [ru, rc] = await Promise.all([
+            apiFetch('/api/usuarios'),
+            apiFetch('/api/cursos')
+        ]);
+
+        const usuarios = ru.ok ? ru.data : [];
+        const cursos   = rc.ok ? rc.data : [];
+
+        // Animate counter
+        animateCounter('stat-usuarios', usuarios.length);
+        animateCounter('stat-cursos', cursos.length);
+        document.getElementById('stat-matriculas').textContent = '—';
+        document.getElementById('stat-taxa').textContent = '—';
+
+        // Mini charts
+        generateMiniChart('chart-usuarios', 'var(--cyan)');
+        generateMiniChart('chart-cursos', 'var(--green)');
+        generateMiniChart('chart-matriculas', 'var(--orange)');
+
+        // Tabela
+        const tbody = document.getElementById('dash-usuarios-body');
+        if (!usuarios.length) {
+            tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><span class="empty-icon">◈</span>Nenhum usuário registrado</div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = usuarios.slice(0, 8).map(u => `
+        <tr>
+            <td style="color:var(--cyan)">#${u.id}</td>
+            <td style="color:var(--text-bright)">${u.nome}</td>
+            <td style="color:var(--text-dim)">${u.email}</td>
+            <td>${planoBadge(u.plano)}</td>
+            <td style="color:var(--orange);font-weight:600">${u.moedas ?? 0}</td>
+            <td style="color:var(--green)">${u.cursosConcluidosComSucesso ?? 0}</td>
+        </tr>`).join('');
+    }
+
+    function animateCounter(id, target) {
+        const el = document.getElementById(id);
+        const start = parseInt(el.textContent) || 0;
+        const duration = 800;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(start + (target - start) * eased);
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    }
+
+    // ══════════════════ USUÁRIOS ══════════════════
+    async function criarUsuario() {
+        const nome  = document.getElementById('u-nome').value.trim();
+        const email = document.getElementById('u-email').value.trim();
+        const senha = document.getElementById('u-senha').value.trim();
+        if (!nome || !email || !senha) { showAlert('alert-u', '⚠ Preencha todos os campos obrigatórios', false); return; }
+
+        loader('loader-u', true);
+        const r = await apiFetch('/api/usuarios', 'POST', { nome, email, senha });
+        loader('loader-u', false);
+
+        if (r.ok) {
+            showAlert('alert-u', `✔ Usuário #${r.data.id} criado com sucesso!`, true);
+            document.getElementById('u-nome').value = '';
+            document.getElementById('u-email').value = '';
+            document.getElementById('u-senha').value = '';
+            listarUsuarios();
+        } else {
+            const msg = r.data?.message || r.data?.error || 'Erro ao criar usuário';
+            showAlert('alert-u', '✖ ' + msg, false);
+        }
+    }
+
+    async function buscarUsuario() {
+        const id = document.getElementById('u-busca-id').value;
+        if (!id) return;
+        loader('loader-ub', true);
+        const r = await apiFetch('/api/usuarios/' + id);
+        loader('loader-ub', false);
+
+        const el = document.getElementById('usuario-resultado');
+        if (r.ok) {
+            const u = r.data;
+            el.innerHTML = `
+            <div style="
+                font-family:'JetBrains Mono',monospace;
+                font-size:12px;
+                line-height:2.2;
+                border:1px solid var(--border);
+                padding:20px;
+                border-radius:var(--radius);
+                background:rgba(0,229,255,.02);
+                position:relative;
+                overflow:hidden;
+            ">
+                <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green));"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-family:'Orbitron',sans-serif;font-size:16px;color:var(--cyan);font-weight:900;">#${u.id}</span>
+                    ${planoBadge(u.plano)}
+                </div>
+                <div><span style="color:var(--text-dim)">NOME → </span><span style="color:var(--text-bright)">${u.nome}</span></div>
+                <div><span style="color:var(--text-dim)">EMAIL → </span>${u.email}</div>
+                <div><span style="color:var(--text-dim)">CRÉDITOS → </span><span style="color:var(--cyan)">${u.creditosCursos ?? 0}</span></div>
+                <div><span style="color:var(--text-dim)">CONCLUÍDOS → </span><span style="color:var(--green)">${u.cursosConcluidosComSucesso ?? 0}</span></div>
+                <div><span style="color:var(--text-dim)">MOEDAS → </span><span style="color:var(--orange);font-weight:700">${u.moedas ?? 0}</span></div>
+            </div>`;
+        } else {
+            el.innerHTML = `<div class="alert alert-err show" style="display:block">✖ Usuário #${id} não encontrado</div>`;
+        }
+    }
+
+    async function listarUsuarios() {
+        const r = await apiFetch('/api/usuarios');
+        const tbody = document.getElementById('usuarios-body');
+        if (!r.ok || !r.data.length) {
+            tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><span class="empty-icon">◈</span>Nenhum usuário cadastrado</div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = r.data.map(u => `
+        <tr>
+            <td style="color:var(--cyan)">#${u.id}</td>
+            <td style="color:var(--text-bright)">${u.nome}</td>
+            <td style="color:var(--text-dim)">${u.email}</td>
+            <td>${planoBadge(u.plano)}</td>
+            <td>${u.creditosCursos ?? 0}</td>
+            <td style="color:var(--green)">${u.cursosConcluidosComSucesso ?? 0}</td>
+            <td style="color:var(--orange);font-weight:600">${u.moedas ?? 0}</td>
+            <td>
+                <button class="btn btn-sm" onclick="viewUsuario(${u.id})" style="font-size:8px;padding:5px 10px;">VER</button>
+            </td>
+        </tr>`).join('');
+    }
+
+    async function viewUsuario(id) {
+        const r = await apiFetch('/api/usuarios/' + id);
+        if (!r.ok) return;
+        const u = r.data;
+        openModal(`
+            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:3px;color:var(--cyan);margin-bottom:20px;">
+                DETALHES DO USUÁRIO
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2.4;">
+                <div><span style="color:var(--text-dim)">ID:</span> <span style="color:var(--cyan);font-weight:700">#${u.id}</span></div>
+                <div><span style="color:var(--text-dim)">NOME:</span> <span style="color:var(--text-bright)">${u.nome}</span></div>
+                <div><span style="color:var(--text-dim)">EMAIL:</span> ${u.email}</div>
+                <div><span style="color:var(--text-dim)">PLANO:</span> ${planoBadge(u.plano)}</div>
+                <div><span style="color:var(--text-dim)">CRÉDITOS:</span> <span style="color:var(--cyan)">${u.creditosCursos ?? 0}</span></div>
+                <div><span style="color:var(--text-dim)">CURSOS CONCLUÍDOS:</span> <span style="color:var(--green)">${u.cursosConcluidosComSucesso ?? 0}</span></div>
+                <div><span style="color:var(--text-dim)">MOEDAS:</span> <span style="color:var(--orange);font-weight:700">${u.moedas ?? 0}</span></div>
+            </div>
+        `);
+    }
+
+    // ══════════════════ CURSOS ══════════════════
+    async function criarCurso() {
+        const titulo    = document.getElementById('c-titulo').value.trim();
+        const descricao = document.getElementById('c-desc').value.trim();
+        if (!titulo) { showAlert('alert-c', '⚠ Título é obrigatório', false); return; }
+
+        loader('loader-c', true);
+        const r = await apiFetch('/api/cursos', 'POST', { titulo, descricao });
+        loader('loader-c', false);
+
+        if (r.ok) {
+            showAlert('alert-c', `✔ Curso #${r.data.id} criado com sucesso!`, true);
+            document.getElementById('c-titulo').value = '';
+            document.getElementById('c-desc').value = '';
+            listarCursos();
+        } else {
+            const msg = r.data?.message || r.data?.error || 'Erro ao criar curso';
+            showAlert('alert-c', '✖ ' + msg, false);
+        }
+    }
+
+    async function listarCursos() {
+        const r = await apiFetch('/api/cursos');
+        const tbody = document.getElementById('cursos-body');
+        if (!r.ok || !r.data.length) {
+            tbody.innerHTML = `<tr><td colspan="3"><div class="empty"><span class="empty-icon">◈</span>Nenhum curso cadastrado</div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = r.data.map(c => `
+        <tr>
+            <td style="color:var(--cyan)">#${c.id}</td>
+            <td style="color:var(--text-bright);font-weight:600">${c.titulo}</td>
+            <td style="color:var(--text-dim);max-width:200px;overflow:hidden;text-overflow:ellipsis;">${c.descricao || '—'}</td>
+        </tr>`).join('');
+    }
+
+    // ══════════════════ MATRÍCULAS ══════════════════
+    async function matricular() {
+        const usuarioId = Number(document.getElementById('m-uid').value);
+        const cursoId   = Number(document.getElementById('m-cid').value);
+        const bonus     = document.getElementById('m-bonus').value === 'true';
+        if (!usuarioId || !cursoId) { showAlert('alert-m', '⚠ Informe IDs de usuário e curso', false); return; }
+
+        loader('loader-m', true);
+        const r = await apiFetch('/api/matriculas', 'POST', { usuarioId, cursoId, bonus });
+        loader('loader-m', false);
+
+        if (r.ok) {
+            showAlert('alert-m', `✔ Matrícula #${r.data.id} criada com sucesso!`, true);
+        } else {
+            const msg = r.data?.message || r.data?.error || 'Erro ao matricular';
+            showAlert('alert-m', '✖ ' + msg, false);
+        }
+    }
+
+    async function concluirMatricula() {
+        const id        = Number(document.getElementById('conc-id').value);
+        const notaFinal = Number(document.getElementById('conc-nota').value);
+        if (!id) { showAlert('alert-conc', '⚠ Informe o ID da matrícula', false); return; }
+
+        loader('loader-conc', true);
+        const r = await apiFetch(`/api/matriculas/${id}/concluir`, 'PUT', { notaFinal });
+        loader('loader-conc', false);
+
+        if (r.ok) {
+            showAlert('alert-conc', `✔ Matrícula #${r.data.id} concluída! Nota: ${r.data.notaFinal}`, true);
+        } else {
+            const msg = r.data?.message || r.data?.error || 'Erro ao concluir matrícula';
+            showAlert('alert-conc', '✖ ' + msg, false);
+        }
+    }
+
+    async function listarMatriculas() {
+        const uid = document.getElementById('m-list-uid').value;
+        if (!uid) return;
+        loader('loader-ml', true);
+        const r = await apiFetch('/api/matriculas/usuario/' + uid);
+        loader('loader-ml', false);
+
+        const tbody = document.getElementById('matriculas-body');
+        if (!r.ok || !r.data.length) {
+            tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><span class="empty-icon">◈</span>Nenhuma matrícula encontrada para este usuário</div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = r.data.map(m => `
+        <tr>
+            <td style="color:var(--cyan)">#${m.id}</td>
+            <td style="color:var(--text-bright)">${m.usuarioNome}</td>
+            <td>${m.cursoTitulo}</td>
+            <td>${statusBadge(m.status)}</td>
+            <td style="color:var(--orange);font-weight:600">${m.notaFinal != null ? m.notaFinal : '—'}</td>
+            <td>${m.bonus ? '<span class="badge badge-green">BÔNUS</span>' : '<span class="badge badge-dim">PADRÃO</span>'}</td>
+        </tr>`).join('');
+    }
+
+    // ══════════════════ KEYBOARD SHORTCUTS ══════════════════
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+        if (e.altKey && e.key === '1') switchTab('dashboard');
+        if (e.altKey && e.key === '2') switchTab('usuarios');
+        if (e.altKey && e.key === '3') switchTab('cursos');
+        if (e.altKey && e.key === '4') switchTab('matriculas');
+    });
+
+    // ══════════════════ INIT ══════════════════
+    loadDashboard();
 </script>
 </body>
 </html>
