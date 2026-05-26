@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "usuario-postgres",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "usuario_db",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "Comment": "Banco PostgreSQL do projeto Osmakapa Academy"
+    }
+  }
+}
