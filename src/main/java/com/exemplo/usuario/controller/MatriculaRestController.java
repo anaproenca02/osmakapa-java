@@ -1,8 +1,8 @@
 package com.exemplo.usuario.controller;
 
-import com.exemplo.usuario.dto.ConcluirMatriculaRequestDTO;
-import com.exemplo.usuario.dto.MatriculaRequestDTO;
-import com.exemplo.usuario.dto.MatriculaResponseDTO;
+import com.exemplo.usuario.dto.request.ConcluirMatriculaRequestDTO;
+import com.exemplo.usuario.dto.request.MatriculaRequestDTO;
+import com.exemplo.usuario.dto.response.MatriculaResponseDTO;
 import com.exemplo.usuario.service.MatriculaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

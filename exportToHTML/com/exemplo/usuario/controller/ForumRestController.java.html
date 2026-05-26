@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>ForumRestController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ForumRestController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">controller</span><span class="s2">;</span>
+
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">request</span><span class="s2">.</span><span class="s1">ComentarioForumRequestDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">request</span><span class="s2">.</span><span class="s1">PostagemForumRequestDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">response</span><span class="s2">.</span><span class="s1">ComentarioForumResponseDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">response</span><span class="s2">.</span><span class="s1">PostagemForumResponseDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">response</span><span class="s2">.</span><span class="s1">RankingForumResponseDTO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">exemplo</span><span class="s2">.</span><span class="s1">usuario</span><span class="s2">.</span><span class="s1">service</span><span class="s2">.</span><span class="s1">ForumService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">io</span><span class="s2">.</span><span class="s1">swagger</span><span class="s2">.</span><span class="s1">v3</span><span class="s2">.</span><span class="s1">oas</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">Operation</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">io</span><span class="s2">.</span><span class="s1">swagger</span><span class="s2">.</span><span class="s1">v3</span><span class="s2">.</span><span class="s1">oas</span><span class="s2">.</span><span class="s1">annotations</span><span class="s2">.</span><span class="s1">tags</span><span class="s2">.</span><span class="s1">Tag</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">jakarta</span><span class="s2">.</span><span class="s1">validation</span><span class="s2">.</span><span class="s1">Valid</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpStatus</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">bind</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s1">@RestController</span>
+<span class="s1">@RequestMapping</span><span class="s2">(</span><span class="s3">&quot;/api/forum&quot;</span><span class="s2">)</span>
+<span class="s1">@Tag</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Forum&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">ForumRestController </span><span class="s2">{</span>
+
+    <span class="s0">private final </span><span class="s1">ForumService service</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">ForumRestController</span><span class="s2">(</span><span class="s1">ForumService service</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">service </span><span class="s2">= </span><span class="s1">service</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/postagens&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Listar postagens do forum&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">PostagemForumResponseDTO</span><span class="s2">&gt; </span><span class="s1">listarPostagens</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">listarPostagens</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s3">&quot;/postagens&quot;</span><span class="s2">)</span>
+    <span class="s1">@ResponseStatus</span><span class="s2">(</span><span class="s1">HttpStatus</span><span class="s2">.</span><span class="s1">CREATED</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Criar postagem no forum&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">PostagemForumResponseDTO criarPostagem</span><span class="s2">(</span><span class="s1">@Valid @RequestBody PostagemForumRequestDTO dto</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">criarPostagem</span><span class="s2">(</span><span class="s1">dto</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s3">&quot;/postagens/{postagemId}/comentarios&quot;</span><span class="s2">)</span>
+    <span class="s1">@ResponseStatus</span><span class="s2">(</span><span class="s1">HttpStatus</span><span class="s2">.</span><span class="s1">CREATED</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Comentar em postagem do forum&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">ComentarioForumResponseDTO comentar</span><span class="s2">(</span><span class="s1">@PathVariable Long postagemId</span><span class="s2">,</span>
+                                               <span class="s1">@Valid @RequestBody ComentarioForumRequestDTO dto</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">comentar</span><span class="s2">(</span><span class="s1">postagemId</span><span class="s2">, </span><span class="s1">dto</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/ranking&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Ranking mensal do forum&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">RankingForumResponseDTO</span><span class="s2">&gt; </span><span class="s1">ranking</span><span class="s2">(</span><span class="s1">@RequestParam</span><span class="s2">(</span><span class="s1">required </span><span class="s2">= </span><span class="s0">false</span><span class="s2">) </span><span class="s1">Integer ano</span><span class="s2">,</span>
+                                                 <span class="s1">@RequestParam</span><span class="s2">(</span><span class="s1">required </span><span class="s2">= </span><span class="s0">false</span><span class="s2">) </span><span class="s1">Integer mes</span><span class="s2">) {</span>
+        <span class="s1">LocalDate hoje </span><span class="s2">= </span><span class="s1">LocalDate</span><span class="s2">.</span><span class="s1">now</span><span class="s2">();</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">rankingMensal</span><span class="s2">(</span>
+                <span class="s1">ano </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">? </span><span class="s1">ano </span><span class="s2">: </span><span class="s1">hoje</span><span class="s2">.</span><span class="s1">getYear</span><span class="s2">(),</span>
+                <span class="s1">mes </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">? </span><span class="s1">mes </span><span class="s2">: </span><span class="s1">hoje</span><span class="s2">.</span><span class="s1">getMonthValue</span><span class="s2">()</span>
+        <span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s3">&quot;/ranking/bonus&quot;</span><span class="s2">)</span>
+    <span class="s1">@Operation</span><span class="s2">(</span><span class="s1">summary </span><span class="s2">= </span><span class="s3">&quot;Conceder curso bonus ao aluno mais participativo do mes&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">RankingForumResponseDTO concederBonus</span><span class="s2">(</span><span class="s1">@RequestParam </span><span class="s0">int </span><span class="s1">ano</span><span class="s2">, </span><span class="s1">@RequestParam </span><span class="s0">int </span><span class="s1">mes</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">service</span><span class="s2">.</span><span class="s1">concederBonusMensal</span><span class="s2">(</span><span class="s1">ano</span><span class="s2">, </span><span class="s1">mes</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

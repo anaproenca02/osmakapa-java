@@ -1,6 +1,6 @@
 package com.exemplo.usuario.repository;
 
-import com.exemplo.usuario.domain.Matricula;
+import com.exemplo.usuario.domain.matricula.Matricula;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

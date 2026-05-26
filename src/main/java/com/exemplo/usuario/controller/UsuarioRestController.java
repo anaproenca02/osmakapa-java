@@ -1,7 +1,7 @@
 package com.exemplo.usuario.controller;
 
-import com.exemplo.usuario.dto.UsuarioRequestDTO;
-import com.exemplo.usuario.dto.UsuarioResponseDTO;
+import com.exemplo.usuario.dto.request.UsuarioRequestDTO;
+import com.exemplo.usuario.dto.response.UsuarioResponseDTO;
 import com.exemplo.usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

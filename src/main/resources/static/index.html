@@ -2,65 +2,100 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Front simples - V2</title>
+    <title>Plataforma de cursos</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container">
-    <h1>Plataforma de cursos - versão 2</h1>
+<main class="container">
+    <h1>Plataforma de cursos</h1>
     <p>Login HTTP Basic usado no front: <strong>admin / 123456</strong></p>
 
-    <div class="grid">
+    <section class="grid">
         <div class="card">
-            <h2>Criar usuário</h2>
+            <h2>Criar usuario</h2>
             <input id="nome" placeholder="Nome">
             <input id="email" placeholder="E-mail">
             <input id="senha" type="password" placeholder="Senha">
-            <button onclick="criarUsuario()">Salvar usuário</button>
-            <button onclick="listarUsuarios()">Listar usuários</button>
+            <button onclick="run(criarUsuario)">Salvar usuario</button>
+            <button onclick="run(listarUsuarios)">Listar usuarios</button>
             <ul id="usuarios"></ul>
         </div>
 
         <div class="card">
-            <h2>Criar curso</h2>
-            <input id="tituloCurso" placeholder="Título do curso">
-            <textarea id="descricaoCurso" placeholder="Descrição"></textarea>
-            <button onclick="criarCurso()">Salvar curso</button>
-            <button onclick="listarCursos()">Listar cursos</button>
+            <h2>Cursos</h2>
+            <input id="tituloCurso" placeholder="Titulo do curso">
+            <textarea id="descricaoCurso" placeholder="Descricao"></textarea>
+            <button onclick="run(criarCurso)">Salvar curso</button>
+            <button onclick="run(listarCursos)">Listar cursos</button>
             <ul id="cursos"></ul>
         </div>
-    </div>
 
-    <div class="grid" style="margin-top:24px;">
         <div class="card">
-            <h2>Matricular usuário</h2>
-            <input id="matUsuarioId" placeholder="ID do usuário">
+            <h2>Matriculas</h2>
+            <input id="matUsuarioId" placeholder="ID do usuario">
             <input id="matCursoId" placeholder="ID do curso">
             <select id="matBonus">
                 <option value="false">Curso normal</option>
-                <option value="true">Curso bônus</option>
+                <option value="true">Curso bonus</option>
             </select>
-            <button onclick="matricular()">Matricular</button>
+            <button onclick="run(matricular)">Matricular</button>
+            <input id="matriculaId" placeholder="ID da matricula">
+            <input id="notaFinal" placeholder="Nota final">
+            <button onclick="run(concluirMatricula)">Concluir matricula</button>
+            <input id="consultaUsuarioId" placeholder="ID do usuario">
+            <button onclick="run(listarMatriculasUsuario)">Listar matriculas</button>
+            <ul id="matriculas"></ul>
         </div>
 
         <div class="card">
-            <h2>Concluir matrícula</h2>
-            <input id="matriculaId" placeholder="ID da matrícula">
-            <input id="notaFinal" placeholder="Nota final">
-            <button onclick="concluirMatricula()">Concluir</button>
+            <h2>Forum e ranking</h2>
+            <input id="forumUsuarioId" placeholder="ID do usuario">
+            <input id="forumTitulo" placeholder="Titulo da postagem">
+            <textarea id="forumConteudo" placeholder="Conteudo da postagem"></textarea>
+            <button onclick="run(criarPostagem)">Criar postagem</button>
+            <input id="postagemId" placeholder="ID da postagem">
+            <textarea id="comentarioConteudo" placeholder="Comentario"></textarea>
+            <button onclick="run(criarComentario)">Comentar</button>
+            <input id="rankingAno" placeholder="Ano do ranking">
+            <input id="rankingMes" placeholder="Mes do ranking">
+            <button onclick="run(listarRanking)">Listar ranking</button>
+            <button onclick="run(concederBonusForum)">Conceder bonus mensal</button>
+            <ul id="ranking"></ul>
         </div>
-    </div>
 
-    <div class="card" style="margin-top:24px;">
-        <h2>Consultar matrículas por usuário</h2>
-        <input id="consultaUsuarioId" placeholder="ID do usuário">
-        <button onclick="listarMatriculasUsuario()">Listar matrículas</button>
-        <ul id="matriculas"></ul>
-    </div>
+        <div class="card">
+            <h2>Projetos reais</h2>
+            <input id="projetoNome" placeholder="Nome do projeto">
+            <textarea id="projetoDescricao" placeholder="Descricao do projeto"></textarea>
+            <button onclick="run(criarProjetoReal)">Criar projeto</button>
+            <input id="projetoId" placeholder="ID do projeto">
+            <input id="projetoUsuarioId" placeholder="ID do usuario Premium">
+            <button onclick="run(participarProjeto)">Participar e ganhar moedas</button>
+            <button onclick="run(listarProjetos)">Listar projetos</button>
+            <ul id="projetos"></ul>
+        </div>
+
+        <div class="card">
+            <h2>Pagamentos e beneficios</h2>
+            <input id="pagUsuarioId" placeholder="ID do usuario">
+            <input id="pagValor" placeholder="Valor">
+            <input id="pagMes" type="date">
+            <button onclick="run(criarPagamento)">Criar pagamento</button>
+            <input id="pagamentoId" placeholder="ID do pagamento">
+            <button onclick="run(confirmarPagamento)">Confirmar pagamento</button>
+            <select id="beneficioTipo">
+                <option value="CURSO_EXTRA">Curso extra - 3 moedas</option>
+                <option value="MENTORIA">Mentoria - 5 moedas</option>
+                <option value="CERTIFICADO">Certificado - 2 moedas</option>
+            </select>
+            <button onclick="run(resgatarBeneficio)">Resgatar beneficio</button>
+            <ul id="pagamentos"></ul>
+        </div>
+    </section>
 
     <p><a href="/swagger-ui/index.html" target="_blank">Abrir Swagger</a></p>
     <p><a href="/home" target="_blank">Abrir /home</a></p>
-</div>
+</main>
 <script src="/js/app.js"></script>
 </body>
 </html>
